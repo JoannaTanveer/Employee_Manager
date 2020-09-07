@@ -43,3 +43,43 @@ db.query(
     }]
 );
 
+//JOINS//
+
+//self-join- employee as direct report//
+
+SELECT 
+    IFNULL(CONCAT(m.last_name, ', ', m.first_name),
+            'Top Manager') AS 'Manager',
+    CONCAT(e.last_name, ', ', e.first_name) AS 'Direct report'
+FROM
+    employees e
+LEFT JOIN employees m ON 
+    m.id = e.id
+ORDER BY 
+    manager_id DESC;
+
+
+//left join  departments and roles //
+SELECT 
+    name,
+    title,
+    salary
+    status
+FROM
+    role
+LEFT JOIN department ON 
+    role.department_id = departmend.id;
+
+// inner join employee and role//
+SELECT
+    first_name,
+    last_name,
+    title,
+    salary
+FROM
+    employee
+INNER JOIN role ON
+    employee.id = role.id;
+
+    
+    
