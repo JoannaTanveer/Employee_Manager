@@ -1,3 +1,4 @@
+DROP DATABASE IF EXISTS staffDB;
 CREATE DATABASE staffDB;
 
 USE staffDB;
@@ -13,12 +14,11 @@ CREATE TABLE role (
     title VARCHAR(30),
     salary DECIMAL,
     department_id INT,
-    PRIMARY KEY (id)
-    CONSTRAINT fk_category
-    FOREIGN KEY (department_id)
-    REFERENCE department(role)
+    PRIMARY KEY (id),
+	INDEX dep_ind (department_id),
+    CONSTRAINT fk_department FOREIGN KEY (department_id) REFERENCES department(id)
+ 
 );
-
 CREATE TABLE employee (
     id INT AUTO_INCREMENT NOT NULL,
     first_name VARCHAR(30),
@@ -27,42 +27,35 @@ CREATE TABLE employee (
     manager_id INT,
     PRIMARY KEY (id),
 
-    CONSTRAINT fk_role
-    FOREIGN KEY (role_id)
-    REFERENCE employee(role),
-
-    CONSTRAINT fk_manager
-    FOREIGN KEY (manager_id)
-    REFERENCE employee(last_name)
-
+    FOREIGN KEY (role_id) REFERENCES role(id),
+    FOREIGN KEY (manager_id) REFERENCES employee(id)
 );
+INSERT INTO department (name) values ("Administration");
+INSERT INTO department (name) values ("Production");
+INSERT INTO department (name) values ("Sales");
+
+INSERT INTO employee (first_name, last_name) values ("Joanna", "Tanveer");
+INSERT INTO employee (first_name, last_name) values ("Asha", "Tanveer");
+INSERT INTO employee (first_name, last_name) values ("Bobby", "Tanveer");
+INSERT INTO employee (first_name, last_name) values ("Erin", "Frasier");
+INSERT INTO employee (first_name, last_name) values ("Cindy", "Oehler");
+INSERT INTO employee (first_name, last_name) values ("Benny", "Boi");
+INSERT INTO employee (first_name, last_name) values ("Johnny", "Bananas");
+INSERT INTO employee (first_name, last_name) values ("Chubby", "Butter");
+
+
+INSERT INTO role (title, salary, department_id) values ("CEO", "100000", 1);
+Insert into role (title, salary, department_id) values ("Manager", "80000", 1);
+Insert into role (title, salary, department_id) values ("Sales", "40000", 3);
+Insert into role (title, salary, department_id ) values ("Designer", "75000", 2);
+Insert into role (title, salary, department_id) values ("seamstress", "70000", 2);
+Insert into role (title, salary, department_id) values ("Cat/model", "1000", 2);
+Insert into role (title, salary, department_id) values ("Cat/model", "1000", 2);
+Insert into role (title, salary, department_id) values ("Cat/model", "1000", 2);
+
+
+SELECT * FROM role
 
 
 
 
-
-
-
-
-
-
-
-department:
-
-id - INT PRIMARY KEY
-name - VARCHAR(30) to hold department name
-
-role:
-
-id - INT PRIMARY KEY
-title - VARCHAR(30) to hold role title
-salary - DECIMAL to hold role salary
-department_id - INT to hold reference to department role belongs to
-
-employee:
-
-id - INT PRIMARY KEY
-first_name - VARCHAR(30) to hold employee first name
-last_name - VARCHAR(30) to hold employee last name
-role_id - INT to hold reference to role employee has
-manager_id - INT to hold reference to another employee that manager of the current employee. This field may be null if the employee has no manager
