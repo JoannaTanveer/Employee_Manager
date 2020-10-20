@@ -11,7 +11,7 @@ const db = mysql.createConnection ({
 db.connect((err) => {
     if (err) {throw err;
 }
-console.log(`connected as :${dr.threadId}`);
+console.log(`connected as :${db.threadId}`);
 })
 
 db.query(
@@ -47,31 +47,30 @@ db.query(
 
 //self-join- employee as direct report//
 
-SELECT 
-    IFNULL(CONCAT(m.last_name, ', ', m.first_name),
-            'Top Manager') AS 'Manager',
+db.query(`SELECT 
+    IFNULL(CONCAT(m.last_name, ', ', m.first_name),'Top Manager') AS 'Manager',
     CONCAT(e.last_name, ', ', e.first_name) AS 'Direct report'
 FROM
     employees e
 LEFT JOIN employees m ON 
     m.id = e.id
 ORDER BY 
-    manager_id DESC;
+    manager_id DESC`);
 
 
 //left join  departments and roles //
-SELECT 
+db.query(`SELECT 
     name,
     title,
-    salary
+    salary,
     status
 FROM
     role
 LEFT JOIN department ON 
-    role.department_id = departmend.id;
+    role.department_id = departmend.id`);
 
 // inner join employee and role//
-SELECT
+db.query(`SELECT
     first_name,
     last_name,
     title,
@@ -79,7 +78,7 @@ SELECT
 FROM
     employee
 INNER JOIN role ON
-    employee.id = role.id;
+    employee.id = role.id`);
 
     
     
