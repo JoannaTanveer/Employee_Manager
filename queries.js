@@ -12,7 +12,7 @@ class Queries {
 
     employeeAll () {
        return this.connection.query(
-           ['SELECT e.first_name, e.last_name, e.manager_id, title, salary, name',
+           ['SELECT e.id, e.first_name, e.last_name, e.manager_id, title, e.role_id, salary, name',
             'FROM employee as e',
                 'LEFT JOIN role on e.role_id = role.id',
                 'LEFT JOIN department on department.id = department_id'].join(" "));
@@ -24,8 +24,11 @@ class Queries {
     };
 
     employeeAdd(employee) {
+        console.log('INSERT INTO employee SET ?', employee)
         return  this.connection.query('INSERT INTO employee SET ?', employee)
     };
+
+    
 
     managerQuery() {
         return this.connection.query
@@ -35,20 +38,20 @@ class Queries {
     };
 
     managerOf(id) {
-        return this.connection.query('SELECT * FROM employee WHERE id =?', id)
+        return this.connection.query('SELECT * FROM employee WHERE id = ?', id)
 
     };
 
     byManager(id) {
-        return this.connection.query('SELECT * FROM employee WHERE manager_id =?', id)
+        return this.connection.query('SELECT * FROM employee WHERE manager_id = ?', id)
     };
 
     employeeDelete (id) {
-        return this.connection.query('DELETE FROM employee WHERE id = ?', id)
+        return this.connection.query('DELETE FROM staffdb.employee WHERE id = ?', id)
     };
     
     employeeView (id) {
-        return this.connection.query('SELECT * FROM employee WHERE id =?', id)
+        return this.connection.query('SELECT * FROM employee WHERE id = ?', id)
     };
 
     departmentAdd (dept) {
@@ -57,7 +60,7 @@ class Queries {
 
     employeeUpdate (answer, id) {
         console.log ('answer', answer, 'id', id)
-        return this.connection.query('UPDATE employee SET role_id = ? WHERE id = ?', [ answer.roleChange, id] )}
+        return this.connection.query('UPDATE employee SET role_id = ? WHERE id = ?', [ answer.role_id, id] )}
     
 };
 module.exports = new Queries(connection)

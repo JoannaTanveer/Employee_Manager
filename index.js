@@ -24,12 +24,8 @@ const add_Employee = [
     },
     {
         type: 'input',
-        name: 'title',
-        message: 'What is the employees title?'
-    },{
-        type: 'input',
-        name: 'salary',
-        message: 'What is the employees salary?'
+        name: 'role_id',
+        message: 'What is the role_id for this employee?'
     },
     {
         type: 'input',
@@ -113,7 +109,7 @@ async function addEmployee () {
     
     const employeeArray = await query.employeeAll()
     console.table(employeeArray)
-
+    promtInquirer()
     
 };
 
@@ -131,7 +127,7 @@ function addDepartment () {
         console.log(answers, "addDept")
         query.departmentAdd(answers)
     })
-    
+    promtInquirer()
 };
 
 async function viewByManager() {
@@ -154,12 +150,15 @@ async function viewByManager() {
                 }
             }).then(response => 
     console.table(response))
+    promtInquirer()
 };
 
 async function viewDepartments () {
     const departmentArray= await query.departmentAll()
    
     console.table(departmentArray)
+    promtInquirer()
+
 };
 
 
@@ -181,57 +180,60 @@ async function deleteEmployee () {
     }]);
 
     const { number } = employeeTable.find(e => e.name === response.id);
+    console.log(number, "number")
     await query.employeeDelete(number)
+    promtInquirer()
 };
 
 
 async function updateEmployee () {
     const employeeArray= await query.employeeAll()
-    const employeeTable = employeeArray.map(({id, first_name, last_name, role_id}) => ({
+    const employeeTable = employeeArray.map(({id, first_name, last_name, title}) => ({
         name: `${first_name} ${last_name}`,
-        role: `${ role_id }`,
+        title: `${ title }`,
         employeeID: id
     }));
     console.table(employeeTable)
+    console.table(employeeArray)
 
-
-    const response = await inquirer.prompt([{
+    const employeeUpdate = await inquirer.prompt([{
         type: 'list',
         name: 'id',
         message: "Who is the employee you would like to update?",
         choices: employeeTable
     }]);
 
-    const { employeeID } = employeeTable.find(e => e.name === response.id);
+
+    console.log(employeeTable)
+    const { employeeID } = employeeTable.find(e => e.name == employeeUpdate.id);
     console.log(employeeID)
-    await inquirer.prompt(
-        [{
-        
-        name: 'roleChange',
+
+    const updatedRole = await inquirer.prompt([{
+        name: 'role_id',
         message: "What is the new role?"
     }])
-    .then((answer) => {
-        console.log(answer)
-        query.employeeUpdate(answer, employeeID )
-
-
-    });
-    var value = employeeArray
-    await console.table(employeeArray)
+    
+    await query.employeeUpdate(updatedRole, employeeID )
+    
+    
+    await employeeAll()
+    
 };
+    
+
 
 async function employeeAll() {
     console.log('init')
     const employeeArray = await query.employeeAll()
     console.table(employeeArray)
-    
+    promtInquirer()
 
 }
 
 async function roleAll() {
     const employeeArray = await query.employeeAll()
     console.table(employeeArray)
-    
+    promtInquirer()
 
 }
 
