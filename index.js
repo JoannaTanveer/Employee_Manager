@@ -36,11 +36,11 @@ const add_Employee = [
 
 
 const add_role = [
-    // {
-    //     type:'input',
-    //     name: 'title',
-    //     message: "What is the title of this role?"
-    // }, 
+    {
+        type:'input',
+        name: 'title',
+        message: "What is the title of this role?"
+    }, 
     {
         type: 'input',
         name: 'salary',
@@ -216,7 +216,7 @@ async function updateEmployee () {
         employeeID: id
     }));
     console.table(employeeTable)
-    console.table(employeeArray)
+    
 
     const employeeUpdate = await inquirer.prompt([{
         type: 'list',
