@@ -9,7 +9,7 @@ const startInquire = [
         name: 'action',
         message: 'What would you like to do?',
         choices: ["View all Employees",'Add Employee', 'Update Employee', 'Delete Employee', 
-        'Add Department', 'View Departments', 'Update Department', 'Add Role', 'View Role', 'Update Role', 'View Employees by Manager']
+        'Add Department', 'View Departments', 'Add Role', 'View Role', 'View Employees by Manager']
     }];
 
 const add_Employee = [
@@ -36,18 +36,27 @@ const add_Employee = [
 
 
 const add_role = [
+    // {
+    //     type:'input',
+    //     name: 'title',
+    //     message: "What is the title of this role?"
+    // }, 
     {
-        type:'input',
-        name: 'title',
-        message: "What is the title of this role?"
-    }, {
         type: 'input',
         name: 'salary',
         message : 'What is the annual salary for this role?'
+    }, {
+        type: 'input',
+        name: 'department_id',
+        message: 'What department does this role fall under?'
     }
 ]
 
-
+const add_dept = [{
+    type: 'input',
+    name: "name",
+    message: "What is the name of the new Department?"
+}];
 
 function followUp (answers) {
     switch(answers.action) {
@@ -71,21 +80,17 @@ function followUp (answers) {
         case "View Employees by Manager":
             viewByManager();
             break;
-        case "Add Department":
-            addDepartment();
-            break;
+        
         case "View all Employees":
             employeeAll();
             break;
         case "View Role":
             roleAll();
             break;
-        
+        case "Add Role":
+            addRole();
+            break;
             
-
-
-
-
     }
    
 }
@@ -100,7 +105,10 @@ function promtInquirer () {
 };
 
 async function addEmployee () {
-    
+    const roleArray= await query.roleAll()
+    console.table(roleArray)
+    const managerArray = await query.managerQuery()
+    console.table(managerArray)
     await inquirer.prompt(add_Employee).then((answers)=> {
         console.log(answers)
         query.employeeAdd(answers)
@@ -113,21 +121,35 @@ async function addEmployee () {
     
 };
 
-function addDepartment () {
-
-
+async function addDepartment () {
     
-    inquirer.prompt(
-        [{
-            type: 'input',
-            name: "addDept",
-            message: "What is the name of the new Department?"
-        }]
-    ).then((answers)=> {
-        console.log(answers, "addDept")
+    await inquirer.prompt(add_dept).then((answers)=> {
+        console.log(answers)
         query.departmentAdd(answers)
     })
+        
+    
+    const departmentArray= await query.departmentAll()
+    console.table(departmentArray)
     promtInquirer()
+    
+};
+
+async function addRole () {
+    
+    const departmentArray= await query.departmentAll()
+    console.table(departmentArray)
+    await inquirer.prompt(add_role).then((answers)=> {
+        console.log(answers)
+        query.roleAdd(answers)
+    })
+        
+    
+    const roleArray= await query.roleAll()
+    console.table(roleArray)
+    
+    promtInquirer()
+    
 };
 
 async function viewByManager() {
@@ -231,8 +253,8 @@ async function employeeAll() {
 }
 
 async function roleAll() {
-    const employeeArray = await query.employeeAll()
-    console.table(employeeArray)
+    const roleArray = await query.roleAll()
+    console.table(roleArray)
     promtInquirer()
 
 }

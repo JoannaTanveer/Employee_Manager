@@ -55,7 +55,13 @@ class Queries {
     };
 
     departmentAdd (dept) {
+        console.log(dept)
         return this.connection.query("INSERT INTO department SET ?", dept)
+    };
+
+    roleAdd(role) {
+        console.log(role)
+        return this.connection.query("INSERT INTO role SET ? ", role)
     }
 
     employeeUpdate (answer, id) {
